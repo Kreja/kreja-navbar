@@ -1,0 +1,27 @@
+{
+  "name": "kreja-navbar",
+  "version": "0.0.0",
+  "authors": [
+    "kreja"
+  ],
+  "description": "polymer navbar",
+  "keywords": [
+    "polymer",
+    "navbar"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "../",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.5",
+    "core-transition": "Polymer/core-transition#~0.5.5",
+    "paper-button": "Polymer/paper-button#~0.5.5",
+    "p-theaterjs": "~1.5.3"
+  }
+}

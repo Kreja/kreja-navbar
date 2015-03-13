@@ -1,0 +1,105 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<polymer-element name="kreja-navbar-base" attributes="tips">
+
+  <template>
+    <link rel="stylesheet" href="kreja-navbar-base.css">
+	
+	<div class="navbar" horizontal layout>
+		<!-- left -->
+		<div vertical layout flex two stretch>
+			<!-- tips -->
+			<div class="tips" horizontal layout flex center start-justified>
+				<span id="tips"></span>
+			</div>
+		</div>
+
+		<!-- right -->
+		<div vertical layout flex four stretch>
+			<!-- return btn -->
+			<paper-button id="returnBtn" class="return-btn hide" horizontal layout flex center center-justified on-click="{{_returnMainMenu}}">
+				<!-- 需要插入 <return>你要插入的内容</return>  -->
+				<content select="return"></content>
+			</paper-button>
+			<!-- main -->
+			<div id="mainMenu" class="mainmenu" horizontal layout flex>
+				<!-- 需要插入 -->
+				<content select="mainmenu"></content>
+			</div>
+			<!-- sub -->
+			<div id="subMenu" class="submenu hide" horizontal layout flex twelve>
+				<!-- 需要插入 -->
+				<content select="submenu"></content>
+			</div>
+		</div>
+
+	</div>
+  </template>
+
+  <script>
+    Polymer('kreja-navbar-base', {
+    	ready: function(){
+    		var self = this;
+
+    		self._type(self.$.tips,self.tips,true);
+    	},
+    	/**
+    	 * show sub menu
+    	 * @method showSubMenu 
+    	 */
+    	showSubMenu: function(){
+    		var self = this;
+
+    		self.$.subMenu.classList.remove('hide');
+    		self.$.returnBtn.classList.remove('hide');
+    		self.$.mainMenu.classList.add('hide');
+    	},
+    	_returnMainMenu: function(){
+    		var self = this;
+
+    		self.$.subMenu.classList.add('hide');
+    		self.$.returnBtn.classList.add('hide');
+    		self.$.mainMenu.classList.remove('hide');
+    	},
+    	/**
+	     * 打字效果
+	     * @param  {[type]} ele     [打字区的元素]
+	     * @param  {[type]} content [要打的内容]
+	     * @return {[type]}         [description]
+	     */
+	    _type: function(ele,content,useInnerHtml){
+	        // Instantiation
+	        var theater = new TheaterJS();
+
+	        // Describe actors
+	        theater
+	            .describe("nav", {
+	                experience: 1,
+	                speed: .9,
+	                accuracy: .9
+	            },
+	            ele,useInnerHtml);//不用 innerHtml,用value
+
+	        // Write the scenario
+	        theater
+	            .write("nav:"+content, 400);
+
+	        // Listen to theater's events
+	        theater
+	            .on("say:start, erase:start", function () {
+	                // add blinking caret
+	            })
+	            .on("say:end, erase:end", function () {
+	                // remove blinking caret
+	            })
+	            .on("*", function () {
+	                // do something
+	            });
+	    },
+    });
+  </script>
+
+  <script src="../p-theaterjs/theater.js"></script>
+
+</polymer-element>
