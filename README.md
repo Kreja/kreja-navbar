@@ -2,7 +2,7 @@
 * bower init 
 
 # Install
-`bower install element`
+`bower install kreja-paper-button`
 
 # Documentation and demo
 [documentation](http://kreja.github.io/element/components/element/)

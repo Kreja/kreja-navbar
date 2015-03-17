@@ -1,38 +1,64 @@
 <link rel="import" href="../polymer/polymer.html">
 <link href="kreja-navbar-base.html" rel="import">
+<link rel="import" href="kreja-paper-button.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../core-icons/core-icons.html">
 <link rel="import" href="../core-icon/core-icon.html">
 
-<polymer-element name="kreja-navbar" attributes="">
+<!-- 可以通过插入点插入主菜单，子菜单 -->
+
+<polymer-element name="kreja-navbar" attributes="tips">
 	<template>
-		<link rel="stylesheet" href="kreja-navbar.css">
-		<kreja-navbar-base id="navbar" tips="What can I do for you?">
+		<style>
+			.return{
+			  	color: #333332;
+			}
+			/**
+			 * 针对插入子菜单的元素
+			 * @type {String}
+			 */
+			content[select="submenu"]::content .hide{
+				flex: 0 !important;
+				width: 0;
+				overflow: hidden;
+		    }
+		</style>
+		<kreja-navbar-base id="navbar" tips="{{tips}}">
+
 			<return>
-				<core-icon class="return" icon="arrow-drop-up" title="return"></core-icon>
+				<core-icon class="return" icon="arrow-drop-up" title="Return Main Menu"></core-icon>
 			</return>
-			<mainmenu id="mainMenu" on-click="{{showSubMenu}}" horizontal layout stretch>
-				<paper-button class="menu-btn" horizontal layout flex center center-justified >
-					<core-icon icon="cloud-download" title="download"></core-icon>
-				</paper-button>
+
+			<mainmenu on-click="{{showSubMenu}}" horizontal layout>
+				<content id="mainContent" select="mainmenu"></content>
 			</mainmenu>
-			<submenu horizontal layout stretch>
-				<paper-button class="menu-btn" horizontal layout flex center center-justified >
-					<core-icon icon="add" title="add download"></core-icon>
-				</paper-button>
+
+			<submenu horizontal layout>
+				<content id="subContent" select="submenu"></content>
 			</submenu>
+
 		</kreja-navbar-base>	
 	</template>
 
 	<script>
 		Polymer('kreja-navbar',{
-			ready: function(){
-				console.log(this.$.navbar);
-			},
-			showSubMenu: function(){
+			showSubMenu: function(e){
 				this.$.navbar.showSubMenu();
+				//插入 mainmenu/submenu 的元素 的数组//todo容错处理
+				var btnInMainMenu = this.$.mainContent.getDistributedNodes()[0].querySelectorAll('kreja-paper-button');
+				var btnInSubMenu = this.$.subContent.getDistributedNodes()[0].querySelectorAll('kreja-paper-button');
+				//选择的 maintask
+				var maintask = e.target.dataset.maintask;
+				//选中submenu里对应该maintask元素
+				console.log(btnInSubMenu,maintask);
+
+				//遍历 btnInSubMenu,找出 dataset.maintask
+				for(var i=0;i<btnInSubMenu.length;i++){
+					btnInSubMenu[i].dataset.maintask==maintask?
+					(btnInSubMenu[i].classList.remove('hide')):
+					(btnInSubMenu[i].classList.add('hide'));
+				}
 			}
 		});
-
 	</script>
 </polymer-element>

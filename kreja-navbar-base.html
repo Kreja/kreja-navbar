@@ -1,33 +1,127 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-button/paper-button.html">
 
+<!-- base,只是色块 -->
 <polymer-element name="kreja-navbar-base" attributes="tips">
 
   <template>
-    <link rel="stylesheet" href="kreja-navbar-base.css">
+    <style>
+    	.navbar{
+		    height: 50px;
+		}
+		/**
+		 * return-btn 的 padding 用来渐变的
+		 */
+		.return-btn,
+		.tips{
+		    padding: 3px;
+		    padding-left: 30px;
+		}
+		.return-btn,
+		.tips,
+		.mainmenu,
+		.submenu{
+		    -webkit-transition: all 0.5s;
+		    -moz-transition: all 0.2s;
+		    -o-transition: all 0.5s;
+		    transition: all 0.5s;
+		}
+		/**
+		 * return btn
+		 */
+		.return-btn {
+		  background: #DAB82E;
+		  color: #4285f4;
+		  margin: 0;
+		  border-radius: 0;
+		}
+		paper-button[raised].return-btn {
+		  background: #4285f4;
+		  color: #fff;
+		}
+		/**
+		 * tips
+		 */
+		.tips{
+		    background: #333332; 
+		}
+		.tips span{
+		  color: #E0C453;
+		  font-weight: bold;
+		  font-size: 18px;
+		}
+		/**
+		 * main menu
+		 */
+		.mainmenu{
+		    background: #E0C453;
+		}
+		/**
+		 * sub menu
+		 */
+		.submenu{
+		    background: #E0C453;
+		}
+
+		.hide{
+		    overflow: hidden;
+		    padding-top: 0;
+		    padding-bottom: 0;
+		    flex: 0 !important;
+		}
+		/**
+		 * 打字效果
+		 */
+		.saying:after {
+		    content: "▎";
+		    width: 100px;
+		    font-family: Arial, sans-serif;
+		    font-size: 1.2em;
+		    line-height: 1;
+		    display: inline-block;
+		    vertical-align: baseline;
+		    opacity: 1;
+		    -webkit-animation: caret 800ms infinite;
+		    animation: caret 800ms infinite;
+		    width: 30px;
+		    text-align: right;
+		}
+
+		@-webkit-keyframes caret {
+		    0%, 100% { opacity: 1 }
+		    50% { opacity: 0 }
+		}
+		@keyframes caret {
+		    0%, 100% { opacity: 1 }
+		    50% { opacity: 0 }
+		}
+    </style>
 	
 	<div class="navbar" horizontal layout>
-		<!-- left -->
+
+		<!-- 左侧 -->
 		<div vertical layout flex two stretch>
-			<!-- tips -->
+			<!-- 文字提示 -->
 			<div class="tips" horizontal layout flex center start-justified>
 				<span id="tips"></span>
 			</div>
 		</div>
 
-		<!-- right -->
+		<!-- 右侧 -->
 		<div vertical layout flex four stretch>
-			<!-- return btn -->
+			<!-- 返回主菜单的按钮 -->
 			<paper-button id="returnBtn" class="return-btn hide" horizontal layout flex center center-justified on-click="{{_returnMainMenu}}">
 				<!-- 需要插入 <return>你要插入的内容</return>  -->
 				<content select="return"></content>
 			</paper-button>
-			<!-- main -->
+
+			<!-- 主菜单 -->
 			<div id="mainMenu" class="mainmenu" horizontal layout flex>
 				<!-- 需要插入 -->
 				<content select="mainmenu"></content>
 			</div>
-			<!-- sub -->
+
+			<!-- 子菜单 -->
 			<div id="subMenu" class="submenu hide" horizontal layout flex twelve>
 				<!-- 需要插入 -->
 				<content select="submenu"></content>
@@ -42,7 +136,8 @@
     	ready: function(){
     		var self = this;
 
-    		self._type(self.$.tips,self.tips,true);
+    		//初始化打字工具
+	        self.theater = new TheaterJS();
     	},
     	/**
     	 * show sub menu
@@ -63,32 +158,43 @@
     		self.$.mainMenu.classList.remove('hide');
     	},
     	/**
+         * tips 改变时触发
+         * @return {[type]} [description]
+         */
+        tipsChanged: function(){
+            var self = this;
+            self._type(self.$.tips,self.tips,true);
+        },
+    	/**
 	     * 打字效果
 	     * @param  {[type]} ele     [打字区的元素]
 	     * @param  {[type]} content [要打的内容]
 	     * @return {[type]}         [description]
 	     */
 	    _type: function(ele,content,useInnerHtml){
-	        // Instantiation
-	        var theater = new TheaterJS();
+	    	var self = this;
 
 	        // Describe actors
-	        theater
+	        self.theater
 	            .describe("nav", {
 	                experience: 1,
-	                speed: .9,
-	                accuracy: .9
+	                speed: .8,
+	                accuracy: .8
 	            },
 	            ele,useInnerHtml);//不用 innerHtml,用value
 
 	        // Write the scenario
-	        theater
-	            .write("nav:"+content, 400);
+	        self.theater
+	            .write("nav:"+content, 800);
 
 	        // Listen to theater's events
-	        theater
+	        self.theater
 	            .on("say:start, erase:start", function () {
 	                // add blinking caret
+	                var self    = this,
+                        current = self.current.voice;
+
+                    self.utils.addClass(current, "saying");
 	            })
 	            .on("say:end, erase:end", function () {
 	                // remove blinking caret

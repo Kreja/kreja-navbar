@@ -1,0 +1,31 @@
+<link rel="import" href="../polymer/polymer.html">
+<link href="kreja-navbar.html" rel="import">
+<link rel="import" href="kreja-paper-button.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../core-icons/core-icons.html">
+<link rel="import" href="../core-icon/core-icon.html">
+
+<polymer-element name="kreja-navbar-demo" attributes="">
+	<template>
+		<kreja-navbar tips="{{tips}}">
+			<mainmenu id="mainMenu" horizontal layout>
+				<kreja-paper-button icon="cloud-download" title="download" data-maintask="download"></kreja-paper-button>
+				<kreja-paper-button icon="add" title="watch" data-maintask="watch"></kreja-paper-button>
+			</mainmenu>
+			<submenu id="subMenu" horizontal layout>
+				<kreja-paper-button icon="add" title="add download" data-maintask="download"></kreja-paper-button>
+				<kreja-paper-button icon="cloud-download" title="see download" data-maintask="download"></kreja-paper-button>
+				<kreja-paper-button icon="add" title="add watch" data-maintask="watch"></kreja-paper-button>
+			</submenu>
+		</kreja-navbar>	
+	</template>
+
+	<script>
+		Polymer('kreja-navbar-demo',{
+			ready: function(){
+				this.tips = 'what can i do 4 u?';
+			}
+		});
+
+	</script>
+</polymer-element>

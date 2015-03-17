@@ -1,0 +1,27 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../core-icons/core-icons.html">
+<link rel="import" href="../core-icon/core-icon.html">
+
+<polymer-element name="kreja-paper-button" attributes="icon title" horizontal layout flex >
+	<template>
+		<style>
+			.btn{
+			  	border-radius: 0;
+			  	color: #fff;
+			  	margin: 0;
+			}
+		</style>
+		<paper-button class="btn" horizontal layout flex center center-justified >
+			<core-icon icon="{{icon}}" title="{{title}}"></core-icon>
+		</paper-button>
+	</template>
+
+	<script>
+		Polymer('kreja-paper-button',{
+		});
+	</script>
+</polymer-element>
+
+<!-- demo
+<kreja-paper-button icon="add" title="kreja-paper-button"></kreja-paper-button> -->
